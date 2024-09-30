@@ -74,3 +74,68 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+// Array Methods
+/*
+// Slice method
+let arr = ['a', 'b', 'c', 'd', 'e'];
+
+console.log(arr.slice(2));
+console.log(arr.slice(2, 4)); // 4 is not included. Just 2 and 3
+console.log(arr.slice(-2)); // last 2
+console.log(arr.slice(1, -2)); // b and c
+console.log(arr.slice()); // Shallow copy. Best used when chaining methods
+console.log([...arr]); // same as above
+
+// Splice method - mutates original array
+console.log(arr.splice(2));
+arr.splice(-1); // removes the last element form original array
+arr.splice(1, 2); // a, d. Starts at 1, deletes 2 elements
+
+// Reverse - mutates original array
+arr = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['j', 'i', 'h', 'g', 'f'];
+console.log(arr2.reverse());
+
+// Concat - doesn't mutate original array
+const letters = arr.concat(arr2);
+console.log(letters);
+console.log([...arr, ...arr2]); // Same as above
+
+// Join
+//Same as strings
+*/
+
+// At Method
+/*
+const arr = [23, 11, 64];
+console.log(arr[0]); // Old way
+console.log(arr.at(0)); // New way
+
+// Getting last element
+console.log(arr[arr.length - 1]); // Old way
+console.log(arr.slice(-1)[0]); // Alt old way
+console.log(arr.at(-1)); //New way. Can use any negative value
+
+// also works on strings
+*/
+
+// For each
+
+// Old way
+for (const [i, movement] of movements.entries()) {
+  if (movement > 0) console.log(`Movement ${i + 1}: You deposited ${movement}`);
+  else console.log(`Movement ${i + 1}: You withdrew ${Math.abs(movement)}`);
+}
+
+console.log('----FOR EACH----');
+
+// Using forEach (order of args is important)
+movements.forEach(function (mov, i, arr) {
+  // if (movement > 0) console.log(`You deposited ${movement}`);
+  // else console.log(`You withdrew ${Math.abs(movement)}`);
+  if (mov > 0) console.log(`Movement ${i + 1}: You deposited ${mov}`);
+  else console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
+});
+
+// You can't break out of a forEach loop. Use for loop instead
