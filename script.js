@@ -75,7 +75,21 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html); // afterbegin means all new ones will be on top
   });
 };
+
 displayMovements(account1.movements);
+
+const createUsernames = function (accs) {
+  accs.forEach(acc => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+// console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -198,3 +212,45 @@ checkDogs(julia, kate);
 // TEST DATA 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
 // TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
 */
+
+// Map Method
+/*
+const euroToUSD = 1.1;
+
+// const movementsUSD = movements.map(function (mov) {
+//   return Math.trunc(mov * euroToUSD);
+// });
+// Can also be done with a for-of loop. This is more modern
+
+// With arrow function
+const movementsUSD = movements.map(mov => Math.trunc(mov * euroToUSD));
+
+console.log(movements);
+console.log(movementsUSD);
+
+const movementsNumbered = movements.map(
+  (mov, i) =>
+    `Movement ${i + 1}: You ${mov > 0 ? 'deposited' : 'withdrew'} ${mov}`
+
+  // if (mov > 0) return `Movement ${i + 1}: You deposited ${mov}`;
+  // else return `Movement ${i + 1}: You withdrew ${Math.abs(mov)}`;
+);
+console.log(movementsNumbered); // Displays the new array instead of printing each line
+*/
+
+// Filter method
+/*
+// Can be chained, not possible with For loop
+const deposits = movements.filter(mov => mov > 0);
+console.log(deposits);
+const withdrawals = movements.filter(mov => mov < 0);
+console.log(withdrawals);
+*/
+
+// Reduce Method
+// The 0 is the initial value of the acc
+const balance = movements.reduce((acc, curr, i, arr) => {
+  console.log(`Iteration${i}: ${acc}`);
+  return acc + curr;
+}, 0);
+console.log(balance);
