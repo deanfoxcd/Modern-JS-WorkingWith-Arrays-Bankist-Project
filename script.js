@@ -61,6 +61,22 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = ''; // Clear old data
+
+  movements.forEach((mov, i) => {
+    const transactionType = mov > 0 ? 'deposit' : 'withdrawal';
+    const html = `<div class="movements__row">
+      <div class="movements__type movements__type--${transactionType}">${
+      i + 1
+    } ${transactionType}</div>
+      <div class="movements__value">${mov}</div>
+    </div>`;
+    containerMovements.insertAdjacentHTML('afterbegin', html); // afterbegin means all new ones will be on top
+  });
+};
+displayMovements(account1.movements);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -121,7 +137,8 @@ console.log(arr.at(-1)); //New way. Can use any negative value
 */
 
 // For each
-
+/*
+// On Arrays
 // Old way
 for (const [i, movement] of movements.entries()) {
   if (movement > 0) console.log(`Movement ${i + 1}: You deposited ${movement}`);
@@ -139,3 +156,45 @@ movements.forEach(function (mov, i, arr) {
 });
 
 // You can't break out of a forEach loop. Use for loop instead
+
+
+// On Maps
+currencies.forEach(function (value, key, map) {
+  console.log(`${key}: ${value}`);
+});
+
+// On Sets
+const currenciesUnique = new Set(['USD', 'EUR', 'GBP', 'USD', 'EUR', 'EUR']);
+console.log(currenciesUnique);
+currenciesUnique.forEach(function (value, _, map) {
+  console.log(`${value}: ${value}`); // There is no key
+});
+*/
+
+// **CODING CHALLENEGE #1**
+/*
+
+const julia = [9, 16, 6, 8, 3];
+const kate = [10, 5, 6, 1, 4];
+
+const checkDogs = function (dogsJulia, dogsKate) {
+  const juliaNoCats = dogsJulia.slice(1, -2);
+  // Course solution
+  // const juliaNoCats = dogsJulia.slice();
+  // juliaNoCats.splice(0, 1);
+  // juliaNoCats.splice(-2);
+  const allDogs = [...juliaNoCats, ...dogsKate];
+  // const allDogs = dogsJuliaCorrected.concat(dogsKate)
+  console.log(allDogs);
+  allDogs.forEach(function (dog, i) {
+    if (dog >= 3)
+      console.log(`Dog number ${i + 1} is an adult and is ${dog} years old.`);
+    else console.log(`Dog number ${i + 1} is still a puppy`);
+  });
+};
+
+checkDogs(julia, kate);
+
+// TEST DATA 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+// TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+*/
