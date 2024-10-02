@@ -213,7 +213,7 @@ const checkDogs = function (dogsJulia, dogsKate) {
   });
 };
 
-checkDogs(julia, kate);
+// checkDogs(julia, kate);
 
 // TEST DATA 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
 // TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
@@ -282,3 +282,43 @@ const max = movements.reduce(
 // }, movements[0]);
 console.log(max);
 */
+
+// **Coding Challenge #2**
+/*
+
+const test1 = [5, 2, 4, 1, 15, 8, 3];
+const test2 = [16, 6, 10, 5, 6, 1, 4];
+
+const calcAverageHumanAge = function (ages) {
+  // First try
+  
+  // const humanAges = [];
+  // ages.forEach((age, i) => {
+  //   if (age <= 2) humanAges.push(age * 2);
+  //   else if (age > 2) humanAges.push(16 + age * 4);
+  // });
+  // console.log(humanAges);
+  // const humanAgesAdult = humanAges.filter(age => age >= 18);
+  // console.log(humanAgesAdult);
+  // const aveAge = (
+  //   humanAgesAdult.reduce((acc, age) => acc + age, 0) / humanAgesAdult.length
+  // ).toFixed(2);
+  // console.log(aveAge);
+  
+
+  // My attempt after seeing course solution used map
+  const humanAges = ages.map(age => (age <= 2 ? age * 2 : 16 + age * 4));
+  console.log(humanAges);
+  const adultDogs = humanAges.filter(age => age >= 18);
+  console.log(adultDogs);
+  const aveAge = (
+    adultDogs.reduce((acc, age) => acc + age, 0) / adultDogs.length
+  ).toFixed(2);
+  return aveAge;
+};
+const avg1 = calcAverageHumanAge(test1);
+const avg2 = calcAverageHumanAge(test2);
+console.log(avg1, avg2);
+*/
+
+const
