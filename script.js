@@ -70,7 +70,7 @@ const displayMovements = function (movements) {
       <div class="movements__type movements__type--${transactionType}">${
       i + 1
     } ${transactionType}</div>
-      <div class="movements__value">${mov}</div>
+      <div class="movements__value">€${mov}</div>
     </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html); // afterbegin means all new ones will be on top
   });
@@ -83,6 +83,26 @@ const calcDisplayBalance = function (account) {
   labelBalance.textContent = `€${balance}`;
 };
 calcDisplayBalance(account1);
+
+const calcDisplaySummary = function (account) {
+  const movs = account.movements;
+  const withdrawals = movs
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `€${Math.abs(withdrawals)}`;
+  const deposits = movs
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `€${Math.abs(deposits)}`;
+
+  const interest = movs
+    .filter(mov => mov > 0)
+    .map(mov => (mov * 1.2) / 100)
+    .filter(int => int > 1) // makes it so that interest is only added if it's greater than €1
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumInterest.textContent = `€${interest.toFixed(2)}`;
+};
+calcDisplaySummary(account1);
 
 const createUsernames = function (accs) {
   accs.forEach(acc => {
@@ -291,7 +311,7 @@ const test2 = [16, 6, 10, 5, 6, 1, 4];
 
 const calcAverageHumanAge = function (ages) {
   // First try
-  
+
   // const humanAges = [];
   // ages.forEach((age, i) => {
   //   if (age <= 2) humanAges.push(age * 2);
@@ -304,16 +324,15 @@ const calcAverageHumanAge = function (ages) {
   //   humanAgesAdult.reduce((acc, age) => acc + age, 0) / humanAgesAdult.length
   // ).toFixed(2);
   // console.log(aveAge);
-  
 
   // My attempt after seeing course solution used map
   const humanAges = ages.map(age => (age <= 2 ? age * 2 : 16 + age * 4));
   console.log(humanAges);
   const adultDogs = humanAges.filter(age => age >= 18);
   console.log(adultDogs);
-  const aveAge = (
-    adultDogs.reduce((acc, age) => acc + age, 0) / adultDogs.length
-  ).toFixed(2);
+  const aveAge = adultDogs
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0)
+    .toFixed(2);
   return aveAge;
 };
 const avg1 = calcAverageHumanAge(test1);
@@ -321,4 +340,54 @@ const avg2 = calcAverageHumanAge(test2);
 console.log(avg1, avg2);
 */
 
-const
+// Chaining
+/*
+// Can only chain methods if the previous one returns an array (so not forEach)
+
+// PIPELINE (hard to debug)
+const totalInUSD = movements
+  .filter(mov => mov > 0)
+  // .map(mov => Math.trunc(mov * 1.1))
+  // To debug, log the array (will be the resulting array from the previous operation)
+  .map((mov, i, arr) => {
+    console.log(arr);
+    return Math.trunc(mov * 1.1);
+  })
+  .reduce((acc, mov) => acc + mov, 0);
+  
+console.log(totalInUSD);
+*/
+
+// **Coding Challenge 3**
+/*
+
+const test1 = [5, 2, 4, 1, 15, 8, 3];
+const test2 = [16, 6, 10, 5, 6, 1, 4];
+
+const calcAverageHumanAge = function (ages) {
+  const aveAge = ages
+    .map(age => (age <= 2 ? age * 2 : 16 + age * 4))
+    .filter(age => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0)
+    .toFixed(2);
+  return aveAge;
+};
+
+console.log(calcAverageHumanAge(test1));
+*/
+
+// Find method
+/*
+// Returns the first element that matches the callback, not an array
+
+console.log(movements.find(mov => mov < 0));
+
+//Find Jessica Davis' account
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
+console.log(account);
+
+// using for of
+// for (const acc of accounts) {
+//   if (acc.owner === 'Jessica Davis') console.log(acc);
+// }
+*/
