@@ -61,10 +61,10 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (account) {
   containerMovements.innerHTML = ''; // Clear old data
 
-  movements.forEach((mov, i) => {
+  account.movements.forEach((mov, i) => {
     const transactionType = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
       <div class="movements__type movements__type--${transactionType}">${
@@ -76,13 +76,10 @@ const displayMovements = function (movements) {
   });
 };
 
-displayMovements(account1.movements);
-
 const calcDisplayBalance = function (account) {
   const balance = account.movements.reduce((acc, curr) => acc + curr, 0);
   labelBalance.textContent = `€${balance}`;
 };
-calcDisplayBalance(account1);
 
 const calcDisplaySummary = function (account) {
   const movs = account.movements;
@@ -97,12 +94,11 @@ const calcDisplaySummary = function (account) {
 
   const interest = movs
     .filter(mov => mov > 0)
-    .map(mov => (mov * 1.2) / 100)
+    .map(mov => (mov * account.interestRate) / 100)
     .filter(int => int > 1) // makes it so that interest is only added if it's greater than €1
     .reduce((acc, mov) => acc + mov, 0);
   labelSumInterest.textContent = `€${interest.toFixed(2)}`;
 };
-calcDisplaySummary(account1);
 
 const createUsernames = function (accs) {
   accs.forEach(acc => {
@@ -131,8 +127,15 @@ btnLogin.addEventListener('click', e => {
     }`;
     containerApp.style.opacity = 100;
     //Display movements
+    displayMovements(currentAccount);
     //Display balance
+    calcDisplayBalance(currentAccount);
     //Display summary
+    calcDisplaySummary(currentAccount);
+
+    //Clear input fields and move focus
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
   }
 });
 
