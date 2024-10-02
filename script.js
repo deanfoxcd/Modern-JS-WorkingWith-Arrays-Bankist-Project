@@ -78,6 +78,12 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (account) {
+  const balance = account.movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `€${balance}`;
+};
+calcDisplayBalance(account1);
+
 const createUsernames = function (accs) {
   accs.forEach(acc => {
     acc.username = acc.owner
@@ -248,9 +254,31 @@ console.log(withdrawals);
 */
 
 // Reduce Method
+/*
 // The 0 is the initial value of the acc
-const balance = movements.reduce((acc, curr, i, arr) => {
-  console.log(`Iteration${i}: ${acc}`);
-  return acc + curr;
-}, 0);
+const balance = movements.reduce((acc, curr, i, arr) => acc + curr, 0);
 console.log(balance);
+
+// Maximum Value
+
+// My Solution
+// const max = movements.reduce((acc, curr) => {
+//   if (curr > acc) {
+//     acc = curr;
+//   }
+//   return acc;
+// }, movements[0]);
+
+// My solution oneline (combining the above with course solution)
+const max = movements.reduce(
+  (acc, curr) => (acc > curr ? acc : curr),
+  movements[0]
+);
+
+// Course solution
+// const max = movements.reduce((acc, mov) => {
+//   if (acc > mov) return acc;
+//   else return mov;
+// }, movements[0]);
+console.log(max);
+*/
