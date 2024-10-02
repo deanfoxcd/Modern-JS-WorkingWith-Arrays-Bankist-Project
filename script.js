@@ -117,6 +117,25 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 // console.log(accounts);
 
+// Event Handlers
+let currentAccount;
+btnLogin.addEventListener('click', e => {
+  e.preventDefault(); // Prevents form from submitting
+  currentAccount = accounts.find(
+    acc => acc.username === inputLoginUsername.value
+  );
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // Display UI and welcome message
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(' ')[0]
+    }`;
+    containerApp.style.opacity = 100;
+    //Display movements
+    //Display balance
+    //Display summary
+  }
+});
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
