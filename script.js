@@ -557,3 +557,82 @@ console.log(movements.sort((a, b) => b - a));
 */
 
 // Creating and filling arrays
+/*
+
+const arr = [1, 2, 3, 4, 5, 6, 7];
+const x = new Array(7); // Creates a new array with seven empty values
+// x.fill(1);  //Mutates array, adds 1's into each slot
+x.fill(1, 3, 5); // Inserts 1's at position 3 and 4 (not 5)
+
+arr.fill(23, 4, 6); // [1,2,3,4,23,23,7]
+console.log(arr);
+
+// Array.from
+const y = Array.from({ length: 7 }, () => 1); // Used on Array constructor
+console.log(y);
+
+const z = Array.from({ length: 7 }, (_, i) => i + 1); // [1,2,3,4,5,6,7]
+console.log(z);
+
+labelBalance.addEventListener('click', function () {
+  const movementsUI = Array.from(
+    document.querySelectorAll('.movements__value'),
+    el => Number(el.textContent.replace('€', '')) // The second arg of Array.from is a mapping function
+  );
+  console.log(movementsUI);
+});
+
+// Another way to create an array from a node list. But Array.from does the mapping at the same time
+const movementsUI2 = [...document.querySelectorAll('.movements__value')];
+*/
+
+// Practice
+/*
+
+// Total deposits in bank
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((acc, mov) => acc + mov);
+console.log(bankDepositSum);
+
+// How many deposits over 1000
+const numDeposits1000 = accounts
+  .flatMap(acc => acc.movements)
+  // .filter(mov => mov > 1000)
+  // .length()
+  .reduce((count, curr) => (curr > 1000 ? count + 1 : count), 0);
+// can't use count++ because it still returns the old value until value is called again. ++count would work
+console.log(numDeposits1000);
+
+// Create a new object with reduce()
+const sumsWithd = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, curr) => {
+      // curr > 0 ? (sums.deposits += curr) : (sums.withdrawals += curr);
+      sums[curr > 0 ? 'deposits' : 'withdrawals'] += curr; // SLIGHTLY cleaner
+      return sums;
+    },
+    { deposits: 0, withdrawals: 0 }
+  );
+console.log(sumsWithd);
+
+// Do the above with only reduce()
+
+// Convert any string to title case
+const convertTitleCase = function (str) {
+  const capitalize = str => str[0].toUpperCase() + str.slice(1);
+
+  const exceptions = ['a', 'an', 'the', 'but', 'or', 'on', 'in', 'with', 'and'];
+  const titleCase = str
+    .toLowerCase()
+    .split(' ')
+    .map(word => (exceptions.includes(word) ? word : capitalize(word)))
+    .join(' ');
+  return capitalize(titleCase);
+};
+
+console.log(convertTitleCase('this is a nice title'));
+console.log(convertTitleCase('and so IS THIS'));
+*/
