@@ -680,3 +680,27 @@ const ownersTooLittle = dogs
 // 4
 console.log(`${ownersTooMuch.join(' and ')}'s dogs eat too much!`);
 console.log(`${ownersTooLittle.join(' and ')}'s dogs eat too little!`);
+
+// 5
+console.log(dogs.some(dog => dog.curFood === dog.recFood));
+
+// 6
+console.log(
+  dogs.some(
+    dog => dog.curFood > dog.recFood * 0.9 && dog.curFood < dog.recFood * 1.1
+  )
+  // didn't work when above was in a code block because it didn't actually return anything. I'd have to add 'return' after the code block
+);
+
+// 7
+const okayFood = dog =>
+  dog.curFood > dog.recFood * 0.9 && dog.curFood < dog.recFood * 1.1;
+
+console.log(dogs.filter(okayFood));
+// could also use above for 6 and run console.log(dogs.some(okayFood));
+
+// 8
+const dogsSorted = dogs.slice().sort((a, b) => a.recFood - b.recFood);
+console.log(dogsSorted);
+
+console.log(dogs);
