@@ -61,10 +61,14 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (account) {
+const displayMovements = function (account, sort = false) {
   containerMovements.innerHTML = ''; // Clear old data
 
-  account.movements.forEach((mov, i) => {
+  const movs = sort
+    ? currentAccount.movements.slice().sort((a, b) => a - b) // Sorts a copy
+    : currentAccount.movements;
+
+  movs.forEach((mov, i) => {
     const transactionType = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
       <div class="movements__type movements__type--${transactionType}">${
@@ -77,8 +81,8 @@ const displayMovements = function (account) {
 };
 
 const calcDisplayBalance = function (account) {
-  const balance = account.movements.reduce((acc, curr) => acc + curr, 0);
-  labelBalance.textContent = `€${balance}`;
+  account.balance = account.movements.reduce((acc, curr) => acc + curr, 0);
+  labelBalance.textContent = `€${account.balance}`;
 };
 
 const calcDisplaySummary = function (account) {
@@ -113,10 +117,22 @@ const createUsernames = function (accs) {
 createUsernames(accounts);
 // console.log(accounts);
 
+const updateUI = function (account) {
+  //Display movements
+  displayMovements(account);
+  //Display balance
+  calcDisplayBalance(account);
+  //Display summary
+  calcDisplaySummary(account);
+};
+
 // Event Handlers
+
+// Login
 let currentAccount;
 btnLogin.addEventListener('click', e => {
   e.preventDefault(); // Prevents form from submitting
+
   currentAccount = accounts.find(
     acc => acc.username === inputLoginUsername.value
   );
@@ -126,17 +142,80 @@ btnLogin.addEventListener('click', e => {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
-    //Display movements
-    displayMovements(currentAccount);
-    //Display balance
-    calcDisplayBalance(currentAccount);
-    //Display summary
-    calcDisplaySummary(currentAccount);
 
     //Clear input fields and move focus
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+    updateUI(currentAccount);
   }
+});
+
+// Transfer Money
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const targetAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  const transferAmount = Number(inputTransferAmount.value);
+
+  if (
+    transferAmount > 0 &&
+    targetAcc &&
+    currentAccount.balance >= transferAmount &&
+    targetAcc?.username !== currentAccount.username //first arg can return undefined so targetAcc && si still necessary
+  ) {
+    currentAccount.movements.push(-transferAmount);
+    targetAcc.movements.push(transferAmount);
+    updateUI(currentAccount);
+  } else alert('Invalid transfer');
+
+  inputTransferTo.value = '';
+  inputTransferAmount.value = '';
+});
+
+// Request loan (at least one deposit of 10% of the loan amount)
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const loanAmount = Number(inputLoanAmount.value);
+  if (
+    loanAmount > 0 &&
+    currentAccount.movements.some(mov => mov > loanAmount / 10)
+  ) {
+    currentAccount.movements.push(loanAmount);
+    updateUI(currentAccount);
+  } else {
+    alert('You cannot borrow that much money, sorry');
+  }
+  inputLoanAmount.value = '';
+});
+
+// Close account
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    // Delete account
+    accounts.splice(index, 1);
+    // Hide UI
+    containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin = '';
+  }
+});
+
+// Sort transactions
+let sorted = false;
+btnSort.addEventListener('click', e => {
+  e.preventDefault();
+  displayMovements(currentAccount, !sorted);
+  sorted = !sorted;
 });
 
 /////////////////////////////////////////////////
@@ -413,3 +492,68 @@ console.log(account);
 //   if (acc.owner === 'Jessica Davis') console.log(acc);
 // }
 */
+
+// Some (checks by condition vs includes() which checks equality)
+/*
+const anyDeposits = movements.some(mov => mov > 0);
+console.log(anyDeposits);
+*/
+
+// Every (every element must pass condition)
+/*
+console.log(movements.every(mov => mov > 0)); // false
+console.log(account4.movements.every(mov => mov > 0)); // True
+*/
+
+// Flat & flatMap
+/*
+
+//Only goes one level deep (1) is default
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+console.log(arr.flat()); // [1,2,3,4,5,6,7,8]
+
+const arrDeep = [[[1, 2], 3], [4, [5, 6]], 7, 8];
+console.log(arrDeep.flat()); // [Array(2), 3, 4, Array(2), 7, 8]
+console.log(arrDeep.flat(2)); // [1,2,3,4,5,6,7,8]
+
+// Calculate overall balance
+// const accountMovements = accounts.map(acc => acc.movements);
+// console.log(accountMovements);
+// const allMovements = accountMovements.flat();
+// const overallBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+// console.log(overallBalance);
+
+// Using chaining
+const overallBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalance);
+
+// Flat map (combines flat and map because it's so common)
+// Only goes one level deep!!
+const overallBalanceFM = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overallBalanceFM);
+*/
+
+// Sort
+/*
+// Mutates original array
+
+// Strings
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort());
+
+// Numbers
+console.log(movements.sort()); // Sorts by -/+ and then by first number 1300, 200 etc. Sorts them as strings
+
+// return < 0: a,b (keep order)
+// return > 0: b,a (switch order)
+console.log(movements.sort((a, b) => a - b));
+// Descending
+console.log(movements.sort((a, b) => b - a));
+*/
+
+// Creating and filling arrays
