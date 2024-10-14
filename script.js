@@ -638,6 +638,7 @@ console.log(convertTitleCase('and so IS THIS'));
 */
 
 // **Coding Challenge #4**
+/*
 
 // TEST DATA:
 const dogs = [
@@ -704,3 +705,4 @@ const dogsSorted = dogs.slice().sort((a, b) => a.recFood - b.recFood);
 console.log(dogsSorted);
 
 console.log(dogs);
+*/
